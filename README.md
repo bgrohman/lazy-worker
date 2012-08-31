@@ -9,14 +9,11 @@ IE<10 doesn't support [web workers](https://developer.mozilla.org/en-US/docs/DOM
 Only if you're adventurous. It has been lightly tested with Chrome 21, Firefox 14, and Internet Explorer 9. 
 
 ##Current functionality##
-###Creating workers###
+* Creating workers
+* Sending messages
+* Loading scripts within workers
 
-```javascript
-new Worker('my-worker.js');
-```
-
-###Sending messages###
-
+### Example ###
 ```javascript
 // In main.js
 var worker = new Worker('my-worker.js');
@@ -32,6 +29,8 @@ worker.postMessage({
 
 ```javascript
 // In my-worker.js
+self.importScripts('my-helper-script.js');
+
 self.onmessage = function(msg) {
   var foo = msg.data.foo + 'bar';
   
