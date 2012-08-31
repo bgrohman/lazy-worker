@@ -10,6 +10,7 @@ Only if you're adventurous. It has been lightly tested with Chrome 21, Firefox 1
 
 ##Current functionality##
 * Creating workers
+  * Both the `Worker` constructor and any lazy-worker instances will have a `lazy` property set to `true`   
 * Sending messages
 * Loading scripts within workers
 * onerror support
@@ -17,7 +18,9 @@ Only if you're adventurous. It has been lightly tested with Chrome 21, Firefox 1
 ### Example ###
 ```javascript
 // In main.js
+Worker.lazy; // true
 var worker = new Worker('my-worker.js');
+worker.lazy; // true
 
 worker.onmessage = function(msg) {
   console.log(msg.data.foo);
