@@ -1,0 +1,1 @@
+anotherImportedVar = 'bar';
