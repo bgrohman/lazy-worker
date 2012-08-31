@@ -12,6 +12,7 @@ Only if you're adventurous. It has been lightly tested with Chrome 21, Firefox 1
 * Creating workers
 * Sending messages
 * Loading scripts within workers
+* onerror support
 
 ### Example ###
 ```javascript
@@ -20,6 +21,10 @@ var worker = new Worker('my-worker.js');
 
 worker.onmessage = function(msg) {
   console.log(msg.data.foo);
+};
+
+worker.onerror = function(err) {
+  console.log('Error: ', err.type, err.message);
 };
 
 worker.postMessage({
