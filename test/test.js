@@ -48,7 +48,6 @@ $(function() {
         ok(worker.lazy);
 
         worker.onmessage = function(msg) {
-            console.log('msg: ', msg.data);
             result = msg.data;
         };
 
