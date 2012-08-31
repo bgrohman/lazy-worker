@@ -10,7 +10,7 @@ $(function() {
         lazyWorker.exportWorker();
         ok(Worker.lazy);
 
-        worker = new Worker('simple-test-worker.js');
+        worker = new Worker('workers/simple-test-worker.js');
         ok(worker);
         ok(worker.lazy);
         ok(worker.postMessage);
@@ -22,7 +22,7 @@ $(function() {
             messageReceived = false;
 
         lazyWorker.exportWorker();
-        worker = new Worker('simple-test-worker.js');
+        worker = new Worker('workers/simple-test-worker.js');
 
         ok(worker);
         ok(worker.lazy);
@@ -42,7 +42,7 @@ $(function() {
             result;
 
         lazyWorker.exportWorker();
-        worker = new Worker('test-worker.js');
+        worker = new Worker('workers/test-worker.js');
 
         ok(worker);
         ok(worker.lazy);
@@ -57,5 +57,22 @@ $(function() {
         equal(result.msg, 'test');
         equal(result.anImportedVar, 'foo');
         equal(result.anotherImportedVar, 'bar');
+    });
+
+    test('worker onerror', function() {
+        var worker,
+            capturedError = false;
+
+        lazyWorker.exportWorker();
+        worker = new Worker('workers/error-worker.js');
+
+        worker.onerror = function(err) {
+            capturedError = true;
+            ok(err.type === 'error', 'ErrorEvent type is error');
+            ok(err.message, 'error has a message');
+        };
+
+        worker.postMessage('foo');
+        ok(capturedError);
     });
 });

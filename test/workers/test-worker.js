@@ -1,5 +1,5 @@
-self.importScripts('test-import-script.js');
-importScripts('test-import-script2.js');
+self.importScripts('importScripts/test-import-script.js');
+importScripts('importScripts/test-import-script2.js');
 
 self.count = 0;
 

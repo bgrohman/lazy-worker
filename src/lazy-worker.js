@@ -13,6 +13,38 @@
         self.scriptSource = null;
 
         /**
+         * Constructor for ErrorEvent objects.
+         * @param type a string representing the error type
+         */
+        function ErrorEvent(type) {
+            this.type = type;
+            this.bubbles = false;
+            this.cancelBubble = false;
+            this.cancelable = false;
+            this.defaultPrevented = false;
+            this.eventPhase = 0;
+            this.filename = '';
+            this.lineno = 0;
+            this.returnValue = true;
+            this.timestamp = (new Date()).getTime();
+        }
+
+        /**
+         * Generates an ErrorEvent with the given message and calls the worker
+         * wrapper's onerror function.
+         * @param errorMessage
+         */
+        function handleError(errorMessage) {
+            var errorEvent;
+
+            if (typeof wrapper.onerror === 'function') {
+                errorEvent = new ErrorEvent('error');
+                errorEvent.message = errorMessage;
+                wrapper.onerror(errorEvent);
+            }
+        }
+
+        /**
          * Initializes the worker by eval-ing the worker's source.
          */
         function init() {
@@ -34,7 +66,7 @@
             request.onload = function() {
                 f(request);
             };
-            request.send(null);
+            request.send();
         }
 
         /**
@@ -50,7 +82,7 @@
             try {
                 eval(self.scriptSource);
             } catch (ex) {
-                console.log('Error in worker script eval:', ex);
+                handleError('Error in worker script: ' + ex.message);
             }
         }
 
@@ -66,7 +98,12 @@
                 evt = {
                     data: msg
                 };
-                wrapper.onmessage(evt);
+
+                try {
+                    wrapper.onmessage(evt);
+                } catch (ex) {
+                    handleError('Error on onmessage handler: ' + ex.message);
+                }
             }
         };
 
@@ -88,10 +125,11 @@
 
             function handleRequest(request) {
                 var scriptSource = request.responseText;
+
                 try {
                     eval(scriptSource);
                 } catch (ex) {
-                    console.log('Error in importScripts script eval:', ex);
+                    handleError('Error in worker importScripts: ' + ex.message);
                 }
             }
 
@@ -110,10 +148,9 @@
             return {
                 constructor: Worker,
                 lazy: true,
-                terminate: function() {
-                },
-                onmessage: function() {
-                },
+                terminate: function() {},
+                onmessage: function() {},
+                onerror: function() {},
                 postMessage: function(msg) {
                     var evt;
 
@@ -121,7 +158,12 @@
                         evt = {
                             data: msg
                         };
-                        self.onmessage(evt);
+
+                        try {
+                            self.onmessage(evt);
+                        } catch (ex) {
+                            handleError('Error in worker onmessage: ' + ex.message);
+                        }
                     }
                 }
             };
