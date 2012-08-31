@@ -15,5 +15,6 @@
         ok(worker.lazy);
         ok(worker.postMessage);
         ok(worker.terminate);
+        ok(worker.importScripts);
     });
 }());

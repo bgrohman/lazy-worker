@@ -7,6 +7,9 @@
         self.postMessage = function(msg) {
         };
 
+        self.importScripts = function() {
+        };
+
         self.terminate = function() {
         };
     }
