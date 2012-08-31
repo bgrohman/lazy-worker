@@ -8,4 +8,12 @@
         lazyWorker.exportWorker();
         ok(Worker.lazy);
     });
+
+    test('worker functions', function() {
+        var worker = new Worker('test-worker.js');
+        ok(worker);
+        ok(worker.lazy);
+        ok(worker.postMessage);
+        ok(worker.terminate);
+    });
 }());

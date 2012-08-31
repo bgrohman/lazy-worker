@@ -1,5 +1,14 @@
 (function (globals, undefined) {
-    function Worker() {
+
+    function Worker(scriptUrl) {
+        var self = this;
+        self.lazy = true;
+
+        self.postMessage = function(msg) {
+        };
+
+        self.terminate = function() {
+        };
     }
     Worker.lazy = true;
 
@@ -15,4 +24,5 @@
         exportWorker: exportWorker,
         Worker: Worker
     };
+
 })(window);
