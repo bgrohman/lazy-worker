@@ -1,4 +1,4 @@
-/*jslint evil: true*/
+/*jslint evil: true*/ // Get off my back, Mr. Crockford. Lazy workers need eval.
 (function (globals, undefined) {
 
     /**
