@@ -26,11 +26,11 @@ $(function() {
 
         ok(worker);
         ok(worker.lazy);
-        equal(Worker, worker.constructor);
+        equal(worker.constructor, Worker);
 
         worker.onmessage = function(msg) {
             messageReceived = true;
-            equal('bar', msg.data.foo);
+            equal(msg.data.foo, 'bar');
         };
 
         worker.postMessage('test');
@@ -55,8 +55,8 @@ $(function() {
         worker.postMessage('test');
 
         equal(result.count, 1);
-        equal('test', result.msg);
-        equal('foo', result.anImportedVar);
-        equal('bar', result.anotherImportedVar);
+        equal(result.msg, 'test');
+        equal(result.anImportedVar, 'foo');
+        equal(result.anotherImportedVar, 'bar');
     });
 });
