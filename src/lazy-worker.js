@@ -92,15 +92,9 @@
          * @param msg
          */
         self.postMessage = function(msg) {
-            var evt;
-
             if (typeof wrapper.onmessage === 'function') {
-                evt = {
-                    data: msg
-                };
-
                 try {
-                    wrapper.onmessage(evt);
+                    wrapper.onmessage({data: msg});
                 } catch (ex) {
                     handleError('Error on onmessage handler: ' + ex.message);
                 }
@@ -152,15 +146,9 @@
                 onmessage: function() {},
                 onerror: function() {},
                 postMessage: function(msg) {
-                    var evt;
-
                     if (typeof self.onmessage === 'function') {
-                        evt = {
-                            data: msg
-                        };
-
                         try {
-                            self.onmessage(evt);
+                            self.onmessage({data: msg});
                         } catch (ex) {
                             handleError('Error in worker onmessage: ' + ex.message);
                         }
