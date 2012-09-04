@@ -75,4 +75,37 @@ $(function() {
         worker.postMessage('foo');
         ok(capturedError);
     });
+
+    asyncTest('worker setInterval', function() {
+        var worker,
+            workerCount,
+            count = 0;
+
+        lazyWorker.exportWorker();
+        worker = new Worker('workers/interval-worker.js');
+
+        ok(worker);
+        ok(worker.lazy);
+        
+        worker.onmessage = function(msg) {
+            count += 1;
+
+            workerCount = msg.data.count;
+            ok(workerCount > 0);
+            equal(workerCount, count);
+
+            if (count > 2) {
+                worker.postMessage({action: 'stop'});    
+                stopped = true;
+            }
+        };
+
+        worker.postMessage({action: 'start'});
+
+        setTimeout(function() {
+            console.log('interval done');
+            equal(count, 3);
+            start();
+        }, 5000);
+    });
 });
