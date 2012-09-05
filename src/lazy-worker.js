@@ -10,7 +10,6 @@
             wrapper;
 
         self.lazy = true;
-        self.scriptSource = null;
 
         /**
          * Constructor for ErrorEvent objects.
@@ -75,12 +74,11 @@
          * @param src
          */
         function evalWorkerScript(src) {
-            self.scriptSource = src;
             // Make importScripts available to eval'ed code
             var importScripts = self.importScripts;
 
             try {
-                eval(self.scriptSource);
+                eval(src);
             } catch (ex) {
                 handleError('Error in worker script: ' + ex.message);
             }
