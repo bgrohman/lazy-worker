@@ -4,7 +4,7 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     meta: {
-      version: '0.1.0',
+      version: '0.1.1',
       banner: '/*! lazy-worker - v<%= meta.version %> - ' +
         '<%= grunt.template.today("yyyy-mm-dd") %>\n' +
         '* https://github.com/bgrohman/lazy-worker\n' +
@@ -20,13 +20,13 @@ module.exports = function(grunt) {
     concat: {
       dist: {
         src: ['<banner:meta.banner>', '<file_strip_banner:src/lazy-worker.js>'],
-        dest: 'dist/lazy-worker-0.1.0.min.js'
+        dest: 'dist/lazy-worker-0.1.1.min.js'
       }
     },
     min: {
       dist: {
         src: ['<banner:meta.banner>', '<config:concat.dist.dest>'],
-        dest: 'dist/lazy-worker-0.1.0.min.js'
+        dest: 'dist/lazy-worker-0.1.1.min.js'
       }
     },
     watch: {
