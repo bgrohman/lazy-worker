@@ -1,5 +1,5 @@
 /*jslint evil: true*/ // Get off my back, Mr. Crockford. Lazy workers need eval.
-(function (globals, undefined) {
+(function (globals) {
 
     /**
      * Constructor for new lazy-workers.
