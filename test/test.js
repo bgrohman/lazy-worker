@@ -103,9 +103,34 @@ $(function() {
         worker.postMessage({action: 'start'});
 
         setTimeout(function() {
-            console.log('interval done');
             equal(count, 3);
             start();
         }, 5000);
+    });
+
+    asyncTest('worker setTimeout', function() {
+        var worker,
+            workerCount,
+            count = 0;
+
+        lazyWorker.exportWorker();
+        worker = new Worker('workers/timeout-worker.js');
+
+        ok(worker);
+        ok(worker.lazy);
+
+        worker.onmessage = function() {
+            count += 1;
+            workerCount = msg.data.count;
+            ok(workerCount);
+            equal(workerCount, count);
+        };
+
+        worker.postMessage('foo');
+
+        setTimeout(function() {
+            equal(count, 1);
+            start();
+        }, 2000);
     });
 });
