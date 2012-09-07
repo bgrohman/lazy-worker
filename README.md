@@ -48,9 +48,7 @@ self.onmessage = function(msg) {
 };
 ```
 
-## Troubleshooting ##
-###The unit test fails with SECURITY_ERR: DOM Exception 18###
-See [this stackoverflow topic](http://stackoverflow.com/questions/2704929/uncaught-error-security-err-dom-exception-18) for details. You need to run this on a local server. 
+## Running the Unit Tests ##
+The test.html file needs to be hosted by a server and not open from the local file system. If you have ruby, run `ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port => 9090, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start"` in the top level directory and open [http://localhost:9090/test/test.html](http://localhost:9090/test/test.html).
 
-If you have ruby, run `ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port => 9090, :DocumentRoot => Dir.pwd); trap('INT') { s.shutdown }; s.start"` in the top level directory and open [http://localhost:9090/test/test.html](http://localhost:9090/test/test.html).
-
+Alternatively, the tests can be run using the [grunt build tool](https://github.com/cowboy/grunt) command `grunt qunit`.
