@@ -1,4 +1,5 @@
 $(function() {
+    module('basic functionality');
     test('the basics', function() {
         var worker;
 
@@ -30,6 +31,8 @@ $(function() {
 
         worker.onmessage = function(msg) {
             messageReceived = true;
+            ok(msg);
+            ok(msg.data);
             equal(msg.data.foo, 'bar');
         };
 
@@ -76,6 +79,33 @@ $(function() {
         ok(capturedError);
     });
 
+    module('timeouts and intervals');
+    asyncTest('worker setTimeout', function() {
+        var worker,
+            workerCount,
+            count = 0;
+
+        lazyWorker.exportWorker();
+        worker = new Worker('workers/timeout-worker.js');
+
+        ok(worker);
+        ok(worker.lazy);
+
+        worker.onmessage = function() {
+            count += 1;
+            workerCount = msg.data.count;
+            ok(workerCount);
+            equal(workerCount, count);
+        };
+
+        worker.postMessage('foo');
+
+        setTimeout(function() {
+            equal(count, 1);
+            start();
+        }, 2000);
+    });
+
     asyncTest('worker setInterval', function() {
         var worker,
             workerCount,
@@ -108,29 +138,4 @@ $(function() {
         }, 5000);
     });
 
-    asyncTest('worker setTimeout', function() {
-        var worker,
-            workerCount,
-            count = 0;
-
-        lazyWorker.exportWorker();
-        worker = new Worker('workers/timeout-worker.js');
-
-        ok(worker);
-        ok(worker.lazy);
-
-        worker.onmessage = function() {
-            count += 1;
-            workerCount = msg.data.count;
-            ok(workerCount);
-            equal(workerCount, count);
-        };
-
-        worker.postMessage('foo');
-
-        setTimeout(function() {
-            equal(count, 1);
-            start();
-        }, 2000);
-    });
 });
