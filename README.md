@@ -17,6 +17,7 @@ The lazy-worker script overwrites the global `Worker` object if it doesn't exist
   * Only the `onmessage` function is supported. lazy-worker might support the `addEventListener` method in the future.
 * Loading scripts within workers using the `importScripts` function
 * Error handling within workers using the `onerror` function
+* Nested workers
 
 ### Example ###
 ```javascript
