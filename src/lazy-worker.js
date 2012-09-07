@@ -105,15 +105,9 @@
          * @param script one or more string urls
          */
         self.importScripts = function(script) {
-            var scripts,
+            var scripts = arguments.length > 1 ? arguments : [script],
                 i,
                 len;
-
-            if (arguments.length > 1) {
-                scripts = arguments;
-            } else {
-                scripts = [script];
-            }
 
             function handleRequest(request) {
                 var scriptSource = request.responseText;
