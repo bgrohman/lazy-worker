@@ -3,17 +3,20 @@
 Lazy web workers only work when someone is watching - in the UI thread!
 
 ##Why?##
-IE<10 doesn't support [web workers](https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers). By using a lazy-worker, you can code to the web workers spec even on IE.
+IE<10 doesn't support [web workers](https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers). By using a lazy-worker, you can code to the web workers spec even on IE. 
 
 ##Can I use this?##
 Only if you're adventurous. It has been lightly tested with Chrome 21, Firefox 14, and Internet Explorer 9. 
+
+The lazy-worker script overwrites the global `Worker` object if it doesn't exist. You can manually overwrite the global `Worker` object by calling `lazyWorker.exportWorker()`. Alternatively, you can create a lazy worker manually using the `lazyWorker.Worker` constructor directly.
 
 ##Current Web Worker Functionality##
 * Creating workers
   * Both the `Worker` constructor and any lazy-worker instances will have a `lazy` property set to `true`   
 * Sending messages
-* Loading scripts within workers
-* onerror support
+  * Only the `onmessage` function is supported. lazy-worker might support the `addEventListener` method in the future.
+* Loading scripts within workers using the `importScripts` function
+* Error handling within workers using the `onerror` function
 
 ### Example ###
 ```javascript
