@@ -8,7 +8,7 @@ IE<10 doesn't support [web workers](https://developer.mozilla.org/en-US/docs/DOM
 ##Can I use this?##
 Only if you're adventurous. It has been lightly tested with Chrome 21, Firefox 14, and Internet Explorer 9. 
 
-##Current functionality##
+##Current Web Worker Functionality##
 * Creating workers
   * Both the `Worker` constructor and any lazy-worker instances will have a `lazy` property set to `true`   
 * Sending messages
