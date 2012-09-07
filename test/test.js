@@ -16,6 +16,12 @@ $(function() {
         ok(worker.lazy);
         ok(worker.postMessage);
         ok(worker.terminate);
+
+        worker = new lazyWorker.Worker('workers/simple-test-worker.js');
+        ok(worker);
+        ok(worker.lazy);
+        ok(worker.postMessage);
+        ok(worker.terminate);
     });
 
     test('a basic worker', function() {
