@@ -144,4 +144,26 @@ $(function() {
         }, 5000);
     });
 
+    module('nested workers');
+    test('basic parent-child workers', function() {
+        var worker,
+            result;
+
+        lazyWorker.exportWorker();
+        worker = new Worker('workers/parent-worker.js');
+
+        ok(worker);
+        ok(worker.lazy);
+
+        worker.onmessage = function(msg) {
+            result = msg.data.foo;
+        };
+
+        worker.postMessage({
+            foo: 'bar'
+        });
+
+        ok(result);
+        equal(result, 'bar:parent:child');
+    });
 });
