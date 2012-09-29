@@ -11,6 +11,7 @@ Since lazy-worker only overwrites the global `Worker` object if it doesn't alrea
 ###Browser Support###
 * Chrome 21+
 * Firefox 14+
+* Safari 5+
 * Internet Explorer 9+ 
 
 ### Running the Unit Tests ###
