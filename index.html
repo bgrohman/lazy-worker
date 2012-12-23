@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Lazy-worker by bgrohman</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Lazy-worker</h1>
+        <p>Lazy web workers only work when someone is watching - in the UI thread!</p>
+
+        <p class="view"><a href="https://github.com/bgrohman/lazy-worker">View the Project on GitHub <small>bgrohman/lazy-worker</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/bgrohman/lazy-worker/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/bgrohman/lazy-worker/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/bgrohman/lazy-worker">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>lazy-worker</h1>
+
+<p>Lazy web workers only work when someone is watching - in the UI thread!</p>
+
+<h2>Why?</h2>
+
+<p>IE&lt;10 doesn't support <a href="https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers">web workers</a>. By using a lazy-worker, you can code to the web workers spec even on IE. </p>
+
+<h2>Can I use this?</h2>
+
+<p>Since lazy-worker only overwrites the global <code>Worker</code> object if it doesn't already exist, lazy-worker can be used both in browsers that have native web worker support and those that don't. The global <code>Worker</code> object can be manually overridden by calling <code>lazyWorker.exportWorker()</code>. Alternatively, the <code>lazyWorker.Worker</code> constructor can be used directly to create lazy workers.</p>
+
+<h3>Browser Support</h3>
+
+<ul>
+<li>Chrome 21+</li>
+<li>Firefox 14+</li>
+<li>Safari 5+</li>
+<li>Opera 12+</li>
+<li>Internet Explorer 9+ </li>
+</ul><h3>Running the Unit Tests</h3>
+
+<p>The test.html file needs to be hosted by a server and not open from the local file system. If you have ruby, run <code>ruby -r webrick -e "s = WEBrick::HTTPServer.new(:Port =&gt; 9090, :DocumentRoot =&gt; Dir.pwd); trap('INT') { s.shutdown }; s.start"</code> in the top level directory and open <a href="http://localhost:9090/test/test.html">http://localhost:9090/test/test.html</a>.</p>
+
+<p>Alternatively, the tests can be run using the <a href="https://github.com/cowboy/grunt">grunt build tool</a> command <code>grunt qunit</code>.</p>
+
+<h2>Current Web Worker Functionality</h2>
+
+<ul>
+<li>Creating workers
+
+<ul>
+<li>Both the <code>Worker</code> constructor and any lazy-worker instances will have a <code>lazy</code> property set to <code>true</code>
+</li>
+</ul>
+</li>
+<li>Sending messages
+
+<ul>
+<li>Only the <code>onmessage</code> function is supported. lazy-worker might support the <code>addEventListener</code> method in the future.</li>
+</ul>
+</li>
+<li>Loading scripts within workers using the <code>importScripts</code> function</li>
+<li>Error handling within workers using the <code>onerror</code> function</li>
+<li>Nested workers</li>
+</ul><h3>Example</h3>
+
+<div class="highlight"><pre><span class="c1">// In main.js</span>
+<span class="nx">Worker</span><span class="p">.</span><span class="nx">lazy</span><span class="p">;</span> <span class="c1">// true</span>
+<span class="kd">var</span> <span class="nx">worker</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Worker</span><span class="p">(</span><span class="s1">'my-worker.js'</span><span class="p">);</span>
+<span class="nx">worker</span><span class="p">.</span><span class="nx">lazy</span><span class="p">;</span> <span class="c1">// true</span>
+
+<span class="nx">worker</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">foo</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">worker</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Error: '</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">type</span><span class="p">,</span> <span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">);</span>
+<span class="p">};</span>
+
+<span class="nx">worker</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">({</span>
+  <span class="nx">foo</span><span class="o">:</span> <span class="s1">'foo'</span>
+<span class="p">});</span>
+</pre></div>
+
+<div class="highlight"><pre><span class="c1">// In my-worker.js</span>
+<span class="nx">self</span><span class="p">.</span><span class="nx">importScripts</span><span class="p">(</span><span class="s1">'my-helper-script.js'</span><span class="p">);</span>
+
+<span class="nx">self</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">foo</span> <span class="o">=</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">data</span><span class="p">.</span><span class="nx">foo</span> <span class="o">+</span> <span class="s1">'bar'</span><span class="p">;</span>
+
+  <span class="nx">self</span><span class="p">.</span><span class="nx">postMessage</span><span class="p">({</span>
+    <span class="nx">foo</span><span class="o">:</span> <span class="nx">foo</span>
+  <span class="p">});</span>
+<span class="p">};</span>
+</pre></div>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/bgrohman">bgrohman</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
